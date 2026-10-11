@@ -1,0 +1,1133 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Review Desk</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@400;600;800&family=Newsreader:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+<style>
+:root{
+  box-sizing:border-box;
+  padding-top:env(safe-area-inset-top,0px);
+  padding-bottom:env(safe-area-inset-bottom,0px);
+  --bg:#E9EFF6; --grid:rgba(27,38,64,.07); --ink:#1B2640; --soft:#56637F; --line:#C3CFDF;
+  --panel:#FFFFFF; --panel2:#F1F5FA; --accent:#F4C430; --accent-ink:#1B2640;
+  --good:#1F8A70; --mid:#B7791F; --bad:#D1495B; --goodbg:#DDF3EC; --badbg:#FBE4E7;
+  --rule:#BCD0EA; --margin:#E7788A; --btn:#1B2640; --btn-ink:#FFFFFF;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#111827; --grid:rgba(255,255,255,.045); --ink:#E8EDF6; --soft:#9AA7C0; --line:#34415C;
+    --panel:#1B2436; --panel2:#243049; --accent:#F4C430; --accent-ink:#1B2640;
+    --good:#3CB596; --mid:#E0A82E; --bad:#EF6B7D; --goodbg:#16352E; --badbg:#3E1F27;
+    --rule:#2E4266; --margin:#C8566A; --btn:#E8EDF6; --btn-ink:#111827;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#111827; --grid:rgba(255,255,255,.045); --ink:#E8EDF6; --soft:#9AA7C0; --line:#34415C;
+  --panel:#1B2436; --panel2:#243049; --accent:#F4C430; --accent-ink:#1B2640;
+  --good:#3CB596; --mid:#E0A82E; --bad:#EF6B7D; --goodbg:#16352E; --badbg:#3E1F27;
+  --rule:#2E4266; --margin:#C8566A; --btn:#E8EDF6; --btn-ink:#111827;
+}
+html{scroll-padding-top:env(safe-area-inset-top,0px);-webkit-text-size-adjust:100%}
+*{box-sizing:border-box}
+body{margin:0;background-color:var(--bg);
+  background-image:linear-gradient(var(--grid) 1px,transparent 1px),linear-gradient(90deg,var(--grid) 1px,transparent 1px);
+  background-size:24px 24px;color:var(--ink);
+  font-family:'Bricolage Grotesque',system-ui,-apple-system,'Segoe UI',Roboto,sans-serif;font-size:16px;line-height:1.5}
+.serif{font-family:'Newsreader',Georgia,'Times New Roman',serif}
+h1{font-size:28px;line-height:1.15;letter-spacing:-.02em;font-weight:800;margin:20px 0 6px}
+h2{font-size:19px;font-weight:800;letter-spacing:-.01em;margin:26px 0 10px}
+h3{font-size:16px;font-weight:600;margin:0}
+p{margin:0 0 10px}
+.sub{color:var(--soft);margin-bottom:16px}
+.wrap{max-width:720px;margin:0 auto;padding:0 16px 56px}
+header.top{position:sticky;top:env(safe-area-inset-top,0px);z-index:10;background:var(--bg);border-bottom:1px solid var(--line)}
+header.top .bar{max-width:720px;margin:0 auto;padding:8px 16px;display:flex;align-items:center;justify-content:space-between;gap:8px}
+.brand{font:inherit;font-weight:800;font-size:19px;letter-spacing:-.02em;background:none;border:0;color:var(--ink);cursor:pointer;padding:8px 0;display:flex;align-items:center;gap:8px}
+.brand i{width:22px;height:16px;border:2px solid var(--ink);border-top:4px solid var(--margin);border-radius:3px;display:inline-block}
+.hgroup{display:flex;gap:8px}
+button{font-family:inherit}
+.btn{font:inherit;font-weight:600;border:2px solid transparent;border-radius:10px;padding:10px 16px;min-height:44px;background:var(--btn);color:var(--btn-ink);cursor:pointer}
+.btn:disabled{opacity:.45;cursor:not-allowed}
+.btn.ghost{background:transparent;border-color:var(--line);color:var(--ink)}
+.btn.hi{background:var(--accent);color:var(--accent-ink)}
+.btn.good{background:var(--good);color:#fff}
+.btn.bad{background:var(--bad);color:#fff}
+.btn.sm{min-height:38px;padding:6px 12px;font-size:14px}
+.btn.block{width:100%}
+.link{font:inherit;background:none;border:0;color:var(--soft);text-decoration:underline;cursor:pointer;padding:10px 0;min-height:44px}
+:focus-visible{outline:3px solid var(--ink);outline-offset:2px}
+input[type=text],input[type=password],textarea,select{font:inherit;width:100%;padding:11px 12px;border:1.5px solid var(--line);border-radius:10px;background:var(--panel);color:var(--ink)}
+textarea{resize:vertical;min-height:84px}
+label.f{display:block;font-weight:600;font-size:14px;margin:12px 0 5px}
+.hint{font-size:14px;color:var(--soft)}
+.panel{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:16px;margin:12px 0}
+.note{border-radius:10px;padding:10px 12px;margin:12px 0;font-size:14px;background:var(--panel2);border:1px solid var(--line)}
+.note.warn{background:var(--badbg);border-color:var(--bad)}
+.err{color:var(--bad);font-weight:600;min-height:22px;margin:8px 0}
+.row2{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:14px 0}
+.row{display:flex;gap:10px;align-items:center;flex-wrap:wrap}
+.grow{flex:1}
+.tabs{display:flex;gap:4px;overflow-x:auto;border-bottom:1px solid var(--line);margin:14px 0 4px;-webkit-overflow-scrolling:touch}
+.tab{font:inherit;font-weight:600;white-space:nowrap;background:none;border:0;border-bottom:4px solid transparent;color:var(--soft);padding:10px 12px;min-height:44px;cursor:pointer}
+.tab[aria-selected=true]{color:var(--ink);border-bottom-color:var(--accent)}
+.fhead{display:flex;align-items:flex-start;justify-content:space-between;gap:10px;flex-wrap:wrap}
+.fhead h1{margin-top:8px}
+.grid{display:grid;gap:12px;margin-top:14px}
+.tile{display:block;width:100%;text-align:left;font:inherit;color:var(--ink);background:var(--panel);border:1px solid var(--line);border-left:6px solid var(--margin);border-radius:8px;padding:14px 16px;cursor:pointer}
+.tile .t{font-weight:800;font-size:18px;letter-spacing:-.01em}
+.tile .m{color:var(--soft);font-size:14px;margin:2px 0 10px}
+.bar{height:10px;background:var(--panel2);border-radius:5px;overflow:hidden;border:1px solid var(--line)}
+.bar i{display:block;height:100%;background:var(--good);border-radius:5px}
+.bar i.good{background:var(--good)}.bar i.mid{background:var(--mid)}.bar i.bad{background:var(--bad)}
+.empty{text-align:center;padding:28px 12px;color:var(--soft);border:2px dashed var(--line);border-radius:14px;margin-top:14px}
+.empty b{display:block;color:var(--ink);font-size:18px;margin-bottom:4px}
+/* index card */
+.index{display:block;width:100%;text-align:left;position:relative;min-height:260px;padding:30px 22px 22px 58px;margin:14px 0;color:var(--ink);cursor:pointer;
+  background-color:var(--panel);border:1px solid var(--line);border-radius:6px;
+  background-image:repeating-linear-gradient(to bottom,transparent 0,transparent 31px,var(--rule) 31px,var(--rule) 32px);background-position:0 26px;
+  box-shadow:0 1px 0 var(--line),0 6px 0 -3px var(--panel),0 7px 0 -3px var(--line)}
+.index::before{content:"";position:absolute;left:42px;top:0;bottom:0;width:2px;background:var(--margin);opacity:.75}
+.index::after{content:"";position:absolute;left:0;right:0;top:0;height:6px;background:var(--margin);opacity:.0}
+.index .lab{display:block;font-size:14px;color:var(--margin);font-weight:600;margin-bottom:6px}
+.index .txt{display:block;font-family:'Newsreader',Georgia,serif;font-size:22px;line-height:32px;white-space:pre-wrap;overflow-wrap:anywhere}
+.index .tap{position:absolute;right:14px;bottom:10px;font-size:13px;color:var(--soft)}
+.index.anim{animation:flipIn .32s ease-out}
+@keyframes flipIn{from{transform:perspective(700px) rotateX(-65deg);opacity:.3}to{transform:none;opacity:1}}
+.prog{display:flex;justify-content:space-between;align-items:center;font-weight:600;font-size:14px;color:var(--soft);margin:14px 0 6px}
+/* test */
+.qcard{background:var(--panel);border:1px solid var(--line);border-left:6px solid var(--accent);border-radius:8px;padding:16px;margin:14px 0}
+.qtype{font-size:14px;color:var(--soft);font-weight:600;margin-bottom:6px}
+.qtext{font-family:'Newsreader',Georgia,serif;font-size:21px;line-height:1.4;margin:0;white-space:pre-wrap;overflow-wrap:anywhere}
+.opts{display:grid;gap:10px}
+.opt{display:flex;gap:12px;align-items:flex-start;text-align:left;width:100%;padding:12px;border:1.5px solid var(--line);border-radius:10px;background:var(--panel);color:var(--ink);cursor:pointer;font-family:'Newsreader',Georgia,serif;font-size:18px;line-height:1.35;overflow-wrap:anywhere}
+.opt .k{font-family:'Bricolage Grotesque',sans-serif;font-weight:800;font-size:14px;width:28px;height:28px;border-radius:50%;border:1.5px solid var(--line);flex:none;display:grid;place-items:center}
+.opt.sel{border-color:var(--ink);box-shadow:inset 0 0 0 1px var(--ink);background:var(--panel2)}
+.opt.sel .k{background:var(--accent);border-color:var(--accent);color:#1B2640}
+.navgrid{display:grid;grid-template-columns:repeat(10,1fr);gap:5px;margin:8px 0}
+.dot{font:inherit;font-size:12px;font-weight:600;min-height:32px;border-radius:6px;border:1px solid var(--line);background:var(--panel);color:var(--soft);cursor:pointer;padding:0}
+.dot.done{background:var(--panel2);color:var(--ink);border-color:var(--soft)}
+.dot.cur{background:var(--accent);color:#1B2640;border-color:var(--accent)}
+/* card list */
+.crow{background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:12px;margin:10px 0}
+.crow .q{font-family:'Newsreader',Georgia,serif;font-size:18px;font-weight:600;overflow-wrap:anywhere}
+.crow .a{font-family:'Newsreader',Georgia,serif;font-size:16px;color:var(--soft);overflow-wrap:anywhere;margin-top:2px}
+.chip{display:inline-block;font-size:13px;font-weight:600;border-radius:999px;padding:2px 10px;background:var(--panel2);border:1px solid var(--line);color:var(--soft)}
+.chip.good{color:var(--good);border-color:var(--good)}.chip.mid{color:var(--mid);border-color:var(--mid)}.chip.bad{color:var(--bad);border-color:var(--bad)}
+.rev{display:flex;gap:10px;align-items:flex-start;padding:10px;border:1px solid var(--line);border-radius:10px;background:var(--panel);margin:8px 0;cursor:pointer}
+.rev input{width:22px;height:22px;margin-top:3px;flex:none}
+.rev .rt b{display:block;font-family:'Newsreader',Georgia,serif;font-size:17px;overflow-wrap:anywhere}
+.rev .rt span{display:block;font-family:'Newsreader',Georgia,serif;font-size:15px;color:var(--soft);overflow-wrap:anywhere;display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden}
+/* report */
+.hero{display:flex;gap:18px;align-items:center;margin:16px 0}
+.ring{--p:0;--c:var(--good);width:116px;height:116px;border-radius:50%;background:conic-gradient(var(--c) calc(var(--p) * 1%),var(--panel2) 0);display:grid;place-items:center;flex:none}
+.ring>div{width:88px;height:88px;border-radius:50%;background:var(--panel);display:grid;place-items:center;font-weight:800;font-size:26px}
+.hero .big{font-size:24px;font-weight:800;letter-spacing:-.02em;line-height:1.2}
+.trow{margin:12px 0}
+.trow .top{display:flex;justify-content:space-between;gap:8px;margin-bottom:5px;font-weight:600;overflow-wrap:anywhere}
+ul.tips{padding-left:20px;margin:0}
+ul.tips li{margin:8px 0;font-family:'Newsreader',Georgia,serif;font-size:18px;line-height:1.4}
+details.miss{border:1px solid var(--line);border-radius:10px;background:var(--panel);margin:8px 0;padding:0 12px}
+details.miss summary{cursor:pointer;padding:12px 0;font-weight:600;min-height:44px}
+.mi{padding:10px 0;border-top:1px solid var(--line);font-family:'Newsreader',Georgia,serif;font-size:16px;overflow-wrap:anywhere}
+.mi .yours{color:var(--bad)}.mi .right{color:var(--good);font-weight:600}
+.trend{display:flex;align-items:flex-end;gap:6px;height:64px;margin:8px 0}
+.trend i{flex:1;background:var(--accent);border-radius:3px 3px 0 0;min-height:4px}
+.arow{display:flex;justify-content:space-between;gap:10px;align-items:center;width:100%;text-align:left;font:inherit;color:var(--ink);background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:12px 14px;margin:10px 0;cursor:pointer}
+.chiprow{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:6px}
+.qrev{align-items:flex-start}
+.qrev .stem{font-family:'Newsreader',Georgia,serif;font-size:17px;font-weight:600;overflow-wrap:anywhere;white-space:pre-wrap}
+.qrev ul{margin:6px 0 0;padding-left:20px;font-family:'Newsreader',Georgia,serif;font-size:15px;color:var(--soft);overflow-wrap:anywhere}
+.qrev li.ok{color:var(--good);font-weight:600}
+.qrev .ex{font-size:14px;color:var(--soft);margin-top:6px;font-style:italic}
+/* modal + toast */
+.mback{position:fixed;inset:0;background:rgba(10,16,30,.55);display:flex;align-items:flex-end;justify-content:center;z-index:50;padding:16px 16px calc(16px + env(safe-area-inset-bottom,0px))}
+.modal{background:var(--panel);border-radius:16px;padding:20px;width:100%;max-width:480px;max-height:85vh;overflow:auto;border:1px solid var(--line)}
+.modal h2{margin-top:0}
+#toast{position:fixed;left:50%;bottom:calc(20px + env(safe-area-inset-bottom,0px));transform:translateX(-50%);background:var(--ink);color:var(--bg);padding:10px 16px;border-radius:10px;font-weight:600;z-index:60;display:none;max-width:90%;text-align:center}
+.auth{max-width:420px;margin:0 auto;padding:40px 16px}
+.auth .logo{display:flex;align-items:center;gap:10px;font-weight:800;font-size:30px;letter-spacing:-.03em}
+.auth .logo i{width:34px;height:24px;border:3px solid var(--ink);border-top:6px solid var(--margin);border-radius:4px;display:inline-block}
+@media (prefers-reduced-motion: reduce){.index.anim{animation:none}}
+@media (max-width:420px){.hero{flex-direction:column;align-items:flex-start}.navgrid{grid-template-columns:repeat(8,1fr)}}
+</style>
+</head>
+<body>
+<div id="app"></div>
+<div id="toast" role="status" aria-live="polite"></div>
+<script>
+(function(){
+'use strict';
+
+/* ---------- helpers ---------- */
+var app=document.getElementById('app');
+function $(id){return document.getElementById(id);}
+function esc(s){return String(s==null?'':s).replace(/[&<>"']/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c];});}
+function uid(){return Math.random().toString(36).slice(2,9)+Date.now().toString(36).slice(-4);}
+function shuffle(a){a=a.slice();for(var i=a.length-1;i>0;i--){var j=Math.floor(Math.random()*(i+1));var t=a[i];a[i]=a[j];a[j]=t;}return a;}
+function uniq(a){var s={},o=[];a.forEach(function(x){var k=x.toLowerCase().trim();if(!s[k]){s[k]=1;o.push(x);}});return o;}
+function fmt(ms){var s=Math.max(0,Math.round(ms/1000));var m=Math.floor(s/60);var r=s%60;return m+':'+(r<10?'0':'')+r;}
+function fdate(ts){var d=new Date(ts);return d.toLocaleDateString(undefined,{month:'short',day:'numeric',year:'numeric'})+', '+d.toLocaleTimeString(undefined,{hour:'numeric',minute:'2-digit'});}
+var toastTimer=null;
+function toast(t){var el=$('toast');el.textContent=t;el.style.display='block';clearTimeout(toastTimer);toastTimer=setTimeout(function(){el.style.display='none';},2600);}
+
+/* ---------- storage (localStorage with in-memory fallback) ---------- */
+var mem={},storageOK=true;
+try{localStorage.setItem('rd_probe','1');localStorage.removeItem('rd_probe');}catch(e){storageOK=false;}
+var st={
+  get:function(k){if(storageOK){try{return localStorage.getItem(k);}catch(e){}}return mem[k]===undefined?null:mem[k];},
+  set:function(k,v){if(storageOK){try{localStorage.setItem(k,v);return;}catch(e){storageOK=false;}}mem[k]=v;},
+  del:function(k){if(storageOK){try{localStorage.removeItem(k);}catch(e){}}delete mem[k];}
+};
+function getUsers(){try{return JSON.parse(st.get('rd_users')||'{}');}catch(e){return {};}}
+function saveUsers(u){st.set('rd_users',JSON.stringify(u));}
+function loadData(key){
+  var d;try{d=JSON.parse(st.get('rd_data_'+key)||'null');}catch(e){d=null;}
+  if(!d||!Array.isArray(d.folders))d={folders:[]};
+  d.folders.forEach(function(f){f.cards=f.cards||[];f.results=f.results||[];f.questions=f.questions||[];});
+  return d;
+}
+function persist(){if(S.user)st.set('rd_data_'+S.user,JSON.stringify(S.data));}
+function hashPw(pw,salt){
+  var txt=salt+':'+pw;
+  if(window.crypto&&crypto.subtle&&window.TextEncoder){
+    return crypto.subtle.digest('SHA-256',new TextEncoder().encode(txt)).then(function(buf){
+      return Array.prototype.map.call(new Uint8Array(buf),function(b){return ('0'+b.toString(16)).slice(-2);}).join('');
+    });
+  }
+  var h=5381;for(var i=0;i<txt.length;i++){h=((h<<5)+h+txt.charCodeAt(i))|0;}
+  return Promise.resolve('x'+h);
+}
+
+/* ---------- state ---------- */
+var S={user:null,display:'',data:null,view:'home',fid:null,tab:'cards',authTab:'login',authErr:'',
+  study:null,test:null,report:null,imp:null,modal:null,editId:null,noteText:'',topicGen:'',cloze:true,manualTopic:'',manualMsg:'',sample:undefined,aiBusy:false,aiMsg:'',aiReview:null,aiFid:null,aiScope:'all',aiCount:'20',aiMix:'balanced',aiCtl:null,qEdit:null,qTopic:''};
+S.apiKey=st.get('rd_apikey')||'';S.apiModel=st.get('rd_model')||'claude-sonnet-5-5';
+function folder(){return S.data&&S.data.folders.find(function(f){return f.id===S.fid;});}
+function mastery(f){return f.cards.length?Math.round(100*f.cards.filter(function(c){return c.box>=3;}).length/f.cards.length):0;}
+function resetNav(){S.view='home';S.fid=null;S.tab='cards';S.study=null;S.test=null;S.report=null;S.imp=null;S.modal=null;S.editId=null;S.noteText='';}
+function nav(){render();window.scrollTo(0,0);}
+function band(p){return p>=80?['Strong','good']:p>=60?['Developing','mid']:['Needs focus','bad'];}
+
+/* ---------- card generation from text ---------- */
+var PRON=/^(it|this|that|these|those|they|he|she|we|there|which|who|its|their|his|her|such|however|also|then)\b/i;
+var STOP=/^(however|therefore|because|although|through|between|another|different|following|including|according|important|certain|several|without|within|during|before|should|would|could|which|these|those|their|about|being|using|where|there|while)$/i;
+function extractCards(text,withCloze){
+  var out=[],seen={};
+  function add(front,back,kind){
+    front=front.replace(/\s+/g,' ').trim();back=back.replace(/\s+/g,' ').trim();
+    if(!front||!back)return false;
+    var key=front.toLowerCase();
+    if(seen[key]||key===back.toLowerCase())return false;
+    seen[key]=1;out.push({front:front,back:back,kind:kind,on:true});return true;
+  }
+  var lines=text.replace(/\r/g,'').split('\n').map(function(l){return l.trim();}).filter(Boolean);
+  var rx=/^(?:[\-\u2022*\u25CF\u25AA]+\s*|\(?\d{1,3}[.)]\s+)?([^:=\u2013\u2014]{2,80}?)\s*(?::|=|\s[-\u2013\u2014]\s)\s*(.{6,})$/;
+  var rest=[];
+  lines.forEach(function(line){
+    var m=rx.exec(line);
+    if(m){
+      var f=m[1].trim().replace(/[*_]/g,'');
+      if(f.split(/\s+/).length<=8&&/[A-Za-z]/.test(f)&&!/[.!?]$/.test(f)&&add(f,m[2].trim(),'def'))return;
+    }
+    rest.push(line);
+  });
+  var para=rest.join(' ').replace(/\s+/g,' ');
+  var sents=(para.match(/[^.!?]+[.!?]+(?:["')\]]+)?(?=\s|$)|[^.!?]+$/g)||[]).map(function(s){return s.trim();}).filter(function(s){return s.length>=30&&s.length<=320;});
+  var rd=/^(.{2,70}?)\s+(is defined as|are defined as|is known as|are known as|is called|are called|refers to|refer to|means|is|are)\s+(.{12,})$/i;
+  var leftovers=[];
+  sents.forEach(function(s){
+    var m=rd.exec(s);
+    if(m){
+      var subj=m[1].replace(/^(the|a|an)\s+/i,function(x){return x;}).trim();
+      if(subj.split(/\s+/).length<=8&&!PRON.test(subj)&&!/[,;()]/.test(subj)&&/^[A-Z0-9"']/.test(subj)&&add('Define: '+subj,s,'def'))return;
+    }
+    leftovers.push(s);
+  });
+  if(withCloze){
+    var count=0;
+    leftovers.forEach(function(s){
+      if(count>=80||s.length<45||s.length>260)return;
+      var key=null,m,re=/[A-Z][A-Za-z\-]{2,}(?:\s+[A-Z][A-Za-z\-]{2,}){0,3}/g;
+      while((m=re.exec(s))){if(m.index>0&&!STOP.test(m[0])){key=m[0];break;}}
+      if(!key){var nm=/\b\d[\d,.]*\d\b|\b\d{2,}\b/.exec(s);if(nm)key=nm[0];}
+      if(!key){var words=s.replace(/[^A-Za-z\s\-]/g,' ').split(/\s+/).filter(function(w){return w.length>=7&&!STOP.test(w);});
+        words.sort(function(a,b){return b.length-a.length;});if(words.length)key=words[0];}
+      if(!key)return;
+      var blank=s.replace(key,'_____');
+      if(blank===s)return;
+      if(add(blank,key,'cloze'))count++;
+    });
+  }
+  return out.slice(0,200);
+}
+
+/* ---------- file reading ---------- */
+var loaded={};
+function loadScript(src){
+  if(loaded[src])return loaded[src];
+  loaded[src]=new Promise(function(res,rej){
+    var s=document.createElement('script');s.src=src;s.onload=res;
+    s.onerror=function(){delete loaded[src];rej(new Error('Could not load the reader library. Check your internet connection.'));};
+    document.head.appendChild(s);
+  });
+  return loaded[src];
+}
+function readAs(file,mode){
+  return new Promise(function(res,rej){
+    var r=new FileReader();r.onload=function(){res(r.result);};r.onerror=function(){rej(new Error('File could not be read.'));};
+    if(mode==='text')r.readAsText(file);else r.readAsArrayBuffer(file);
+  });
+}
+var PDFJS='https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.16.105/pdf.min.js';
+var PDFWORKER='https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.16.105/pdf.worker.min.js';
+var MAMMOTH='https://cdnjs.cloudflare.com/ajax/libs/mammoth/1.4.2/mammoth.browser.min.js';
+function readDoc(file,say){
+  var name=file.name.toLowerCase();
+  if(/\.(txt|md|text)$/.test(name))return readAs(file,'text');
+  if(/\.(csv|tsv)$/.test(name)){
+    return readAs(file,'text').then(function(t){
+      return t.replace(/\r/g,'').split('\n').map(function(l){
+        if(name.slice(-4)==='.tsv'||l.indexOf('\t')>-1)return l.replace('\t',': ');
+        var m=/^\s*"([^"]*)"\s*,\s*"?(.*?)"?\s*$/.exec(l)||/^([^,]+),(.*)$/.exec(l);
+        return m?m[1].trim()+': '+m[2].trim():l;
+      }).join('\n');
+    });
+  }
+  if(/\.pdf$/.test(name)){
+    return loadScript(PDFJS).then(function(){
+      window.pdfjsLib.GlobalWorkerOptions.workerSrc=PDFWORKER;
+      return readAs(file,'buffer');
+    }).then(function(buf){
+      return window.pdfjsLib.getDocument({data:buf}).promise;
+    }).then(function(pdf){
+      var text='',chain=Promise.resolve();
+      for(var p=1;p<=pdf.numPages;p++){(function(p){
+        chain=chain.then(function(){say('Reading page '+p+' of '+pdf.numPages+'...');return pdf.getPage(p);})
+          .then(function(page){return page.getTextContent();})
+          .then(function(c){
+            var lastY=null,line='';
+            c.items.forEach(function(it){
+              var y=it.transform[5];
+              if(lastY!==null&&Math.abs(y-lastY)>3){text+=line.trim()+'\n';line='';}
+              line+=it.str+(it.hasEOL?'\n':'');lastY=y;
+            });
+            text+=line.trim()+'\n';
+          });
+      })(p);}
+      return chain.then(function(){return text;});
+    });
+  }
+  if(/\.docx$/.test(name)){
+    return loadScript(MAMMOTH).then(function(){return readAs(file,'buffer');})
+      .then(function(buf){return window.mammoth.extractRawText({arrayBuffer:buf});})
+      .then(function(r){return r.value;});
+  }
+  return Promise.reject(new Error('Unsupported file type. Use PDF, DOCX, TXT, MD or CSV.'));
+}
+
+/* ---------- test building ---------- */
+var TYPE_LABEL={recall:'Recall the answer',term:'Identify the term',blank:'Fill in the blank',understand:'Understanding',apply:'Situation and application',analyze:'Analysis and reasoning'};
+var TYPE_NAME={recall:'Recall questions',term:'Term identification',blank:'Fill in the blank',understand:'Understanding questions',apply:'Application questions',analyze:'Analysis questions'};
+var LEVELS=['easy','medium','hard'];
+var LEVEL_NAME={easy:'Easy (recall)',medium:'Medium (understanding)',hard:'Hard (application and analysis)'};
+var LEVEL_SHORT={easy:'Easy',medium:'Medium',hard:'Hard'};
+var KIND_OPTS=[['recall','Recall (facts and terms)'],['understand','Understanding (explain or compare)'],['apply','Application (situation or scenario)'],['analyze','Analysis (reasoning or evaluation)']];
+function reversible(c){return c.kind!=='cloze'&&c.front.length<=60&&c.back.length>c.front.length;}
+function expectedItems(cards){
+  var n=cards.length;if(n>=50)return 50;
+  return Math.min(50,n+cards.filter(reversible).length);
+}
+function makeQ(c,type,pools,cards){
+  var correct,prompt,primary,secondary;
+  if(type==='recall'){correct=c.back;prompt=c.front;primary=pools.def;secondary=pools.term;}
+  else if(type==='term'){correct=c.front;prompt=c.back;primary=pools.term;secondary=pools.cloze;}
+  else{correct=c.back;prompt=c.front;primary=pools.cloze;secondary=pools.term;}
+  var topicOf={};cards.forEach(function(x){topicOf[x.back]=x.topic;topicOf[x.front]=x.topic;});
+  var used={};used[correct.toLowerCase().trim()]=1;
+  function pick(arr,need){
+    var sc=shuffle(arr.filter(function(a){return !used[a.toLowerCase().trim()];})).map(function(a){
+      return {a:a,s:(topicOf[a]===c.topic?0:50)+Math.abs(a.length-correct.length)/Math.max(correct.length,10)*30+Math.random()*30};
+    }).sort(function(x,y){return x.s-y.s;});
+    var o=[];
+    for(var i=0;i<sc.length&&o.length<need;i++){var k=sc[i].a.toLowerCase().trim();if(used[k])continue;used[k]=1;o.push(sc[i].a);}
+    return o;
+  }
+  var d=pick(primary,3);
+  if(d.length<3)d=d.concat(pick(secondary,3-d.length));
+  if(d.length<1)return null;
+  var opts=shuffle([correct].concat(d));
+  return {cardId:c.id,topic:c.topic,type:type,level:'easy',explanation:'',prompt:prompt,options:opts,answer:opts.indexOf(correct),chosen:null,ms:0};
+}
+function buildAuto(cards){
+  var defs=cards.filter(function(c){return c.kind!=='cloze';});
+  var clozes=cards.filter(function(c){return c.kind==='cloze';});
+  var pools={def:uniq(defs.map(function(c){return c.back;})),cloze:uniq(clozes.map(function(c){return c.back;})),term:uniq(defs.map(function(c){return c.front;}))};
+  var by={};shuffle(cards).forEach(function(c){(by[c.topic]=by[c.topic]||[]).push(c);});
+  var topics=shuffle(Object.keys(by)),order=[],more=true;
+  while(more){more=false;topics.forEach(function(t){if(by[t].length){order.push(by[t].shift());more=true;}});}
+  var chosen=order.slice(0,50).map(function(c){return {card:c,type:c.kind==='cloze'?'blank':'recall'};});
+  for(var i=0;i<order.length&&chosen.length<50;i++){if(reversible(order[i]))chosen.push({card:order[i],type:'term'});}
+  return chosen.map(function(s){return makeQ(s.card,s.type,pools,cards);}).filter(Boolean);
+}
+function allocate(av){
+  var tot=av.easy+av.medium+av.hard,T=Math.min(50,tot);
+  var te=Math.round(T*0.4),tm=Math.round(T*0.35),th=T-te-tm;
+  var tg={easy:te,medium:tm,hard:th},take={};
+  LEVELS.forEach(function(l){take[l]=Math.min(av[l],tg[l]);});
+  var short=T-take.easy-take.medium-take.hard;
+  ['medium','hard','easy'].forEach(function(l){var add=Math.max(0,Math.min(short,av[l]-take[l]));take[l]+=add;short-=add;});
+  return take;
+}
+function interleave(a,b){
+  var out=[],i=0,j=0;
+  while(i<a.length||j<b.length){if(i<a.length)out.push(a[i++]);if(j<b.length)out.push(b[j++]);}
+  return out;
+}
+function makeBankQ(b){
+  var opts=shuffle([b.correct].concat(b.distractors||[]));
+  if(opts.length<2)return null;
+  return {cardId:null,bankId:b.id,topic:b.topic||'General',type:b.kind||'understand',level:b.level||'medium',explanation:b.explanation||'',prompt:b.stem,options:opts,answer:opts.indexOf(b.correct),chosen:null,ms:0};
+}
+function buildTest(cards,bank){
+  var auto=cards.length>=4?buildAuto(cards):[];
+  var bl={easy:[],medium:[],hard:[]};
+  shuffle(bank||[]).forEach(function(b){var q=makeBankQ(b);if(q&&bl[q.level])bl[q.level].push(q);});
+  var pool={easy:interleave(auto,bl.easy),medium:bl.medium,hard:bl.hard};
+  var take=allocate({easy:pool.easy.length,medium:pool.medium.length,hard:pool.hard.length});
+  var out=[];
+  LEVELS.forEach(function(l){out=out.concat(shuffle(pool[l].slice(0,take[l])));});
+  return out;
+}
+
+/* ---------- analysis ---------- */
+function analyze(r,prev,hasMultiTopics){
+  var p=Math.round(100*r.correct/r.total);
+  var topics=Object.keys(r.byTopic).map(function(t){var v=r.byTopic[t];return {t:t,c:v.c,n:v.n,miss:v.n-v.c,p:Math.round(100*v.c/v.n)};});
+  var sorted=topics.slice().sort(function(a,b){return a.p-b.p||b.miss-a.miss;});
+  var focus=sorted.filter(function(x){return x.p<80;});
+  var strengths=topics.filter(function(x){return x.p>=80;}).sort(function(a,b){return b.p-a.p;});
+  var tm=focus.reduce(function(s,x){return s+x.miss;},0);
+  focus.forEach(function(x){x.share=tm?Math.round(100*x.miss/tm):0;});
+  var headline=p>=90?'Excellent result. You know this material well. Keep it fresh with short, spaced reviews.'
+    :p>=75?'Solid result. A few gaps remain, and closing them will move you into the top range.'
+    :p>=60?'You have a working grasp, but several areas are still shaky. Targeted review will help the most.'
+    :'This material needs more work. Start with the focus areas below, then retest after a round of flashcards.';
+  var tips=[];
+  if(prev){
+    var pp=Math.round(100*prev.correct/prev.total),d=p-pp;
+    tips.push(d>0?'Up '+d+' points from your previous attempt ('+pp+'%). Your review is working.'
+      :d<0?'Down '+(-d)+' points from your previous attempt ('+pp+'%). Review the missed cards before retesting.'
+      :'Same score as your previous attempt ('+pp+'%). Try the weak-card study mode to break through.');
+  }
+  if(topics.length>1){
+    var w=sorted[0],b=sorted[sorted.length-1];
+    if(b.p-w.p>=20)tips.push('Your results are uneven. '+b.t+' ('+b.p+'%) is well ahead of '+w.t+' ('+w.p+'%), so shift study time toward '+w.t+'.');
+  }else if(!hasMultiTopics){
+    tips.push('All cards share one topic, so the breakdown is limited. Give cards topic labels, or import from separate files, to see strengths by topic.');
+  }
+  var types=Object.keys(r.byType).map(function(k){var v=r.byType[k];return {k:k,n:v.n,p:Math.round(100*v.c/v.n)};}).filter(function(x){return x.n>=5;});
+  if(types.length>1){
+    types.sort(function(a,b){return a.p-b.p;});
+    var tw=types[0],tb=types[types.length-1];
+    if(tb.p-tw.p>=15){
+      var adv={recall:'Practise explaining each idea in your own words before you flip a card.',
+        term:'Drill vocabulary by covering the term and recalling it from the definition.',
+        blank:'Focus on exact wording and key terms, and reread the source notes for the missed sentences.',
+        understand:'Try explaining each idea aloud and compare it with a similar concept.',
+        apply:'Practise turning each concept into a real classroom or real-life situation, then decide how it applies.',
+        analyze:'Practise giving reasons: why is this answer right and why do the other choices fail?'};
+      tips.push(TYPE_NAME[tw.k]+' is your weakest format ('+tw.p+'% vs '+tb.p+'% for '+TYPE_NAME[tb.k].toLowerCase()+'). '+(adv[tw.k]||''));
+    }
+  }
+  var bl=r.byLevel||{};
+  var lv=LEVELS.map(function(l){var v=bl[l]||{c:0,n:0};return {l:l,c:v.c,n:v.n,p:v.n?Math.round(100*v.c/v.n):null};});
+  var le=lv[0],lh=lv[2];
+  if(le.n>=5&&lh.n>=3){
+    if(le.p>=75&&lh.p<=le.p-25)tips.push('You recall facts well ('+le.p+'% on easy items) but drop to '+lh.p+'% when applying them to situations. Practise scenario questions and explain why each wrong choice fails.');
+    else if(le.p<60)tips.push('Your basics are shaky ('+le.p+'% on easy items). Lock in the core terms and definitions with flashcards before working on application.');
+    else if(lh.p>=75)tips.push('You handle hard, situational questions well ('+lh.p+'%). That points to real understanding, not just memorising.');
+  }else if(lh.n===0&&r.byLevel)tips.push('This test had no application or situational items. Generate or add questions in the Questions tab to measure higher-order thinking.');
+  if(r.blank>0)tips.push(r.blank+(r.blank===1?' item was':' items were')+' left blank. On a real exam, an educated guess beats no answer.');
+  var avg=r.seconds/r.total;
+  if(avg<6&&p<70)tips.push('You averaged about '+Math.round(avg)+' seconds per item. Slowing down to read every choice may raise your score.');
+  else if(avg>40)tips.push('You averaged about '+Math.round(avg)+' seconds per item. Timed practice will help your pace.');
+  var linked=r.missed.filter(function(m){return m.cardId;}).length;
+  if(linked)tips.push('Study the '+linked+(linked===1?' missed flashcard':' missed flashcards')+' now. They were reset, so they show first in weak-card sessions.');
+  if(r.missed.length>linked)tips.push('Read the explanations for the missed scenario and understanding questions in the list below.');
+  return {p:p,topics:topics,sorted:sorted,focus:focus,strengths:strengths,headline:headline,tips:tips,types:Object.keys(r.byType).map(function(k){var v=r.byType[k];return {k:k,c:v.c,n:v.n,p:Math.round(100*v.c/v.n)};}),levels:lv};
+}
+
+/* ---------- views ---------- */
+function authView(){
+  var reg=S.authTab==='register';
+  return '<div class="auth"><div class="logo"><i></i>Review Desk</div>'+
+  '<p class="sub" style="margin-top:8px">Turn your notes into flashcards, then test yourself subject by subject.</p>'+
+  '<div class="tabs" role="tablist"><button class="tab" role="tab" aria-selected="'+(!reg)+'" data-act="auth-tab" data-v="login">Log in</button>'+
+  '<button class="tab" role="tab" aria-selected="'+reg+'" data-act="auth-tab" data-v="register">Create account</button></div>'+
+  '<label class="f" for="u">Username</label><input id="u" type="text" autocomplete="username" autocapitalize="none" data-enter="'+(reg?'do-register':'do-login')+'">'+
+  '<label class="f" for="p">Password</label><input id="p" type="password" autocomplete="'+(reg?'new-password':'current-password')+'" data-enter="'+(reg?'do-register':'do-login')+'">'+
+  (reg?'<label class="f" for="p2">Confirm password</label><input id="p2" type="password" autocomplete="new-password" data-enter="do-register">':'')+
+  '<div class="err" id="autherr">'+esc(S.authErr)+'</div>'+
+  '<button class="btn block" data-act="'+(reg?'do-register':'do-login')+'">'+(reg?'Create account':'Log in')+'</button>'+
+  '<div class="note">Accounts and study data are saved in this browser on this device only. Use Backup inside the app to move your data. A forgotten password cannot be recovered.</div></div>'+
+  (storageOK?'':'<div class="note warn" style="margin:0 16px">Storage is blocked in this browser, so data will be lost when you close the page.</div>');
+}
+function headerView(){
+  return '<header class="top"><div class="bar"><button class="brand" data-act="go-home"><i></i>Review Desk</button>'+
+  '<div class="hgroup"><button class="btn ghost sm" data-act="open-backup">Backup</button><button class="btn ghost sm" data-act="logout">Log out</button></div></div></header>';
+}
+function homeView(){
+  var fs=S.data.folders;
+  var h='<h1>Hi, '+esc(S.display)+'</h1><p class="sub">Each folder is a subject area with its own cards, tests and reports.</p>'+
+  '<button class="btn hi" data-act="new-folder">New folder</button>';
+  if(!fs.length){
+    h+='<div class="empty"><b>No folders yet</b>Create one for each subject area you are reviewing, such as Algebra or Professional Education.</div>';
+  }else{
+    h+='<div class="grid">'+fs.map(function(f){
+      var m=mastery(f),last=f.results.length?f.results[f.results.length-1]:null;
+      var lp=last?Math.round(100*last.correct/last.total):null;
+      return '<button class="tile" data-act="open-folder" data-id="'+f.id+'"><div class="t">'+esc(f.name)+'</div>'+
+        '<div class="m">'+f.cards.length+(f.cards.length===1?' card':' cards')+' &middot; '+(last?'Last test '+lp+'%':'No test yet')+'</div>'+
+        '<div class="bar" aria-label="Mastery '+m+' percent"><i style="width:'+m+'%"></i></div>'+
+        '<div class="hint" style="margin-top:4px">Mastered '+m+'%</div></button>';
+    }).join('')+'</div>';
+  }
+  return h;
+}
+function folderView(){
+  var f=folder();
+  if(!f){S.view='home';return homeView();}
+  var tabs=[['cards','Cards ('+f.cards.length+')'],['add','Add'],['questions','Questions ('+f.questions.length+')'],['study','Study'],['test','Test'],['results','Results ('+f.results.length+')']];
+  var h='<button class="link" data-act="go-home">All folders</button>'+
+  '<div class="fhead"><h1>'+esc(f.name)+'</h1><div class="row"><button class="btn ghost sm" data-act="rename-folder">Rename</button><button class="btn ghost sm" data-act="delete-folder">Delete</button></div></div>'+
+  '<div class="tabs" role="tablist">'+tabs.map(function(t){return '<button class="tab" role="tab" aria-selected="'+(S.tab===t[0])+'" data-act="tab" data-t="'+t[0]+'">'+t[1]+'</button>';}).join('')+'</div>';
+  if(S.tab==='cards')h+=cardsView(f);
+  else if(S.tab==='add')h+=addView(f);
+  else if(S.tab==='questions')h+=questionsView(f);
+  else if(S.tab==='study')h+=studyView(f);
+  else if(S.tab==='test')h+=testView(f);
+  else h+=resultsView(f);
+  return h;
+}
+function cardsView(f){
+  if(!f.cards.length)return '<div class="empty"><b>This folder is empty</b>Add cards by hand or generate them from your notes or a file.<br><br><button class="btn" data-act="tab" data-t="add">Add cards</button></div>';
+  var h='<div class="row" style="margin-top:12px"><input id="search" type="text" placeholder="Search cards" class="grow" style="width:auto" aria-label="Search cards"></div>';
+  h+=f.cards.slice().reverse().map(function(c){
+    if(S.editId===c.id){
+      return '<div class="crow" data-s=""><label class="f" for="ef">Question or term</label><textarea id="ef">'+esc(c.front)+'</textarea>'+
+        '<label class="f" for="eb">Answer</label><textarea id="eb">'+esc(c.back)+'</textarea>'+
+        '<label class="f" for="et">Topic</label><input id="et" type="text" value="'+esc(c.topic)+'">'+
+        '<div class="row2"><button class="btn ghost" data-act="cancel-edit">Cancel</button><button class="btn" data-act="save-edit" data-id="'+c.id+'">Save changes</button></div></div>';
+    }
+    var m=c.box>=3?['Mastered','good']:c.box>=1?['Learning','mid']:['New','bad'];
+    return '<div class="crow" data-s="'+esc((c.front+' '+c.back+' '+c.topic).toLowerCase())+'"><div class="q">'+esc(c.front)+'</div><div class="a">'+esc(c.back)+'</div>'+
+      '<div class="row" style="margin-top:8px"><span class="chip">'+esc(c.topic)+'</span><span class="chip '+m[1]+'">'+m[0]+'</span><span class="grow"></span>'+
+      '<button class="btn ghost sm" data-act="edit-card" data-id="'+c.id+'">Edit</button><button class="btn ghost sm" data-act="delete-card" data-id="'+c.id+'">Delete</button></div></div>';
+  }).join('');
+  return h;
+}
+function topicsOf(f){return uniq(f.cards.map(function(c){return c.topic;}));}
+function addView(f){
+  var tl=topicsOf(f);
+  var h='<h2>Add one card</h2><div class="panel">'+
+  '<label class="f" for="mf">Question or term</label><textarea id="mf" placeholder="Photosynthesis"></textarea>'+
+  '<label class="f" for="mb">Answer</label><textarea id="mb" placeholder="The process plants use to turn light into chemical energy."></textarea>'+
+  '<label class="f" for="mt">Topic (used for your strengths report)</label><input id="mt" type="text" list="topiclist" value="'+esc(S.manualTopic)+'" placeholder="General">'+
+  '<datalist id="topiclist">'+tl.map(function(t){return '<option value="'+esc(t)+'">';}).join('')+'</datalist>'+
+  '<div style="margin-top:14px"><button class="btn block" data-act="add-card">Add card</button></div></div>';
+  h+='<h2>Generate cards from notes or a file</h2><div class="panel">'+
+  '<label class="f" for="file">Upload a PDF, DOCX, TXT, MD or CSV</label><input id="file" type="file" accept=".pdf,.docx,.txt,.md,.csv,.tsv,text/plain,application/pdf">'+
+  '<div class="hint" id="fstatus" style="margin-top:6px">PDFs need selectable text. Scanned pages are not supported.</div>'+
+  '<label class="f" for="notes">Or paste your notes</label><textarea id="notes" style="min-height:140px" placeholder="Term: definition&#10;Mean: the sum of values divided by their count.&#10;The Pythagorean theorem states that a squared plus b squared equals c squared.">'+esc(S.noteText)+'</textarea>'+
+  '<label class="f" for="gt">Topic label for these cards</label><input id="gt" type="text" value="'+esc(S.topicGen)+'" placeholder="Defaults to the file name or General">'+
+  '<label class="row" style="margin-top:12px;gap:10px;cursor:pointer"><input type="checkbox" id="cloze" style="width:22px;height:22px" '+(S.cloze?'checked':'')+'><span>Also make fill-in-the-blank cards from other sentences</span></label>'+
+  '<div class="hint" style="margin-top:8px">Lines like Term: definition become cards directly. Sentences such as X is a... become Define cards.</div>'+
+  '<div style="margin-top:14px"><button class="btn hi block" data-act="gen-notes">Generate cards</button></div></div>';
+  if(S.imp){
+    h+='<h2>Review generated cards</h2>';
+    if(!S.imp.items.length){
+      h+='<div class="note">No cards could be built from that text. Try lines in the form Term: definition, or longer sentences.</div>';
+    }else{
+      h+='<div class="hint"><span id="impcount">'+S.imp.items.length+'</span> of '+S.imp.items.length+' selected. Untick any you do not want.</div>'+
+      '<div class="row" style="margin:8px 0"><button class="btn ghost sm" data-act="imp-all">Select all</button><button class="btn ghost sm" data-act="imp-none">Select none</button></div>'+
+      '<label class="f" for="rtopic">Topic for these cards</label><input id="rtopic" type="text" value="'+esc(S.imp.topic)+'">'+
+      S.imp.items.map(function(it,i){
+        return '<label class="rev"><input type="checkbox" data-imp="'+i+'" checked><span class="rt"><b>'+esc(it.front)+'</b><span>'+esc(it.back)+'</span></span></label>';
+      }).join('')+
+      '<div style="margin-top:12px"><button class="btn block" data-act="save-import">Add selected cards to this folder</button></div>';
+    }
+  }
+  return h;
+}
+function studyView(f){
+  if(S.study&&S.study.fid===f.id)return studySession(f);
+  if(!f.cards.length)return '<div class="empty"><b>Nothing to study yet</b>Add some cards first.<br><br><button class="btn" data-act="tab" data-t="add">Add cards</button></div>';
+  var weak=f.cards.filter(function(c){return c.box<=2;}).length;
+  var h='<h2>Flashcards</h2><div class="panel"><label class="f" for="scope">What to study</label><select id="scope">'+
+  '<option value="all">All cards ('+f.cards.length+')</option>'+
+  '<option value="weak">Weak cards ('+weak+')</option>'+
+  topicsOf(f).map(function(t){var n=f.cards.filter(function(c){return c.topic===t;}).length;return '<option value="t:'+esc(t)+'">Topic: '+esc(t)+' ('+n+')</option>';}).join('')+
+  '</select><label class="row" style="margin-top:12px;gap:10px;cursor:pointer"><input type="checkbox" id="backfirst" style="width:22px;height:22px"><span>Show the answer side first</span></label>'+
+  '<div style="margin-top:14px"><button class="btn block" data-act="study-start">Start studying</button></div></div>'+
+  '<p class="hint">Tap a card to flip it, then mark whether you got it. Cards you miss come back sooner in weak-card sessions.</p>';
+  return h;
+}
+function studySession(f){
+  var s=S.study;
+  if(s.done){
+    return '<h2>Session complete</h2><div class="panel"><div class="hero" style="margin:0"><div class="big">'+s.right+' of '+s.queue.length+' known</div></div>'+
+    (s.miss.length?'<p>'+s.miss.length+' to revisit.</p><button class="btn hi block" data-act="study-missed">Study the missed cards</button><div style="height:10px"></div>':'<p>You knew every card in this round.</p>')+
+    '<button class="btn ghost block" data-act="study-exit">Back to study options</button></div>';
+  }
+  var c=f.cards.find(function(x){return x.id===s.queue[s.i];});
+  if(!c){s.i++;if(s.i>=s.queue.length)s.done=true;return studySession(f);}
+  var showBack=s.flip!==s.backFirst;
+  var pct=Math.round(100*s.i/s.queue.length);
+  var h='<div class="prog"><span>Card '+(s.i+1)+' of '+s.queue.length+'</span><button class="link" style="padding:0;min-height:0" data-act="study-exit">End session</button></div>'+
+  '<div class="bar"><i style="width:'+pct+'%"></i></div>'+
+  '<button class="index'+(s.anim?' anim':'')+'" data-act="study-flip" aria-label="Flip card"><span class="lab">'+(showBack?'Answer':'Question')+'</span><span class="txt">'+esc(showBack?c.back:c.front)+'</span><span class="tap">Tap to flip</span></button>';
+  s.anim=false;
+  h+=s.flip?'<div class="row2"><button class="btn bad" data-act="study-miss">Missed it</button><button class="btn good" data-act="study-know">Got it</button></div>'
+    :'<button class="btn block" data-act="study-flip">Show '+(s.backFirst?'question':'answer')+'</button>';
+  return h;
+}
+function lvChip(l){return '<span class="chip '+(l==='easy'?'good':l==='medium'?'mid':'bad')+'">'+LEVEL_SHORT[l]+'</span>';}
+function levelCounts(f){var c={easy:0,medium:0,hard:0};f.questions.forEach(function(q){if(c[q.level]!==undefined)c[q.level]++;});return c;}
+function levelPreview(f){
+  var bl=levelCounts(f),autoN=f.cards.length>=4?expectedItems(f.cards):0;
+  return allocate({easy:autoN+bl.easy,medium:bl.medium,hard:bl.hard});
+}
+function testView(f){
+  if(S.test&&S.test.fid===f.id)return testSession(f);
+  var n=f.cards.length,nb=f.questions.length;
+  if(n<4&&nb<4)return '<div class="empty"><b>Add at least 4 cards or questions</b>The test needs enough material to build answer choices. You have '+n+' cards and '+nb+' questions.<br><br><button class="btn" data-act="tab" data-t="add">Add cards</button></div>';
+  var tk=levelPreview(f),items=tk.easy+tk.medium+tk.hard;
+  var h='<h2>Assessment</h2><div class="panel"><p>This folder will produce a <b>'+items+'-item</b> multiple-choice test, ordered from easy to hard.</p>'+
+  '<div class="chiprow"><span class="chip good">Easy '+tk.easy+'</span><span class="chip mid">Medium '+tk.medium+'</span><span class="chip bad">Hard '+tk.hard+'</span></div>';
+  if(tk.medium+tk.hard===0)h+='<div class="note">Every item is basic recall right now. Add medium and hard questions, including situational ones, to test real mastery.<br><br><button class="btn hi sm" data-act="tab" data-t="questions">Open Questions</button></div>';
+  else if(tk.medium+tk.hard<items*0.55)h+='<p class="hint">The ideal mix is about 40% easy, 35% medium and 25% hard. Add more medium and hard questions to get closer.</p>';
+  if(items<50)h+='<p class="hint">You have enough material for '+items+' items. Add more cards or questions to reach the full 50.</p>';
+  h+='<ul class="tips"><li>You can move between questions and change answers before finishing.</li><li>The report shows results by topic, by difficulty and by question type, with where to focus next.</li></ul>'+
+  '<div style="margin-top:14px"><button class="btn hi block" data-act="test-start">Start test</button></div></div>';
+  return h;
+}
+function questionsView(f){
+  var cnt=levelCounts(f),tl=topicsOf(f);
+  var h='<h2>Question bank</h2><p class="hint">These are mixed with questions built from your cards when you take the test. Aim for easy facts, medium understanding, and hard situational items.</p>'+
+  '<div class="chiprow"><span class="chip good">Easy '+cnt.easy+'</span><span class="chip mid">Medium '+cnt.medium+'</span><span class="chip bad">Hard '+cnt.hard+'</span></div>';
+  h+='<h2>Generate with AI</h2><div class="panel">';
+  if(S.sample===null&&!S.apiKey){
+    h+='<p class="hint" style="margin-top:0">To generate questions with AI here, paste your own Anthropic API key. Requests go straight from your browser to Anthropic and use your own credits. You can still write questions by hand below.</p>'+
+    '<label class="f" for="apikey">Anthropic API key</label><input id="apikey" type="password" autocomplete="off" autocapitalize="none" placeholder="sk-ant-..." data-enter="key-save">'+
+    '<label class="f" for="apimodel">Model</label><input id="apimodel" type="text" autocapitalize="none" value="'+esc(S.apiModel)+'">'+
+    '<label class="row" style="margin-top:12px;gap:10px;cursor:pointer"><input type="checkbox" id="keyremember" style="width:22px;height:22px"><span>Remember the key on this device</span></label>'+
+    '<div style="margin-top:14px"><button class="btn block" data-act="key-save">Use this key</button></div>'+
+    '<p class="hint" style="margin-top:10px">Leave "remember" unticked on shared computers, because anyone using this browser profile could read a saved key. Create a key with a low spend limit at console.anthropic.com. The key is never included in backups.</p>';
+  }else{
+    h+='<p class="hint" style="margin-top:0">Claude reads your cards and writes questions from easy recall up to situational application. You review them before they are added.</p>'+
+    '<label class="f" for="aiscope">Use cards from</label><select id="aiscope"><option value="all">All topics ('+f.cards.length+' cards)</option>'+
+    tl.map(function(t){var n=f.cards.filter(function(c){return c.topic===t;}).length;return '<option value="'+esc(t)+'"'+(S.aiScope===t?' selected':'')+'>'+esc(t)+' ('+n+')</option>';}).join('')+'</select>'+
+    '<label class="f" for="aicount">How many questions</label><select id="aicount">'+['10','20','30'].map(function(v){return '<option value="'+v+'"'+(S.aiCount===v?' selected':'')+'>'+v+'</option>';}).join('')+'</select>'+
+    '<label class="f" for="aimix">Difficulty mix</label><select id="aimix">'+[['balanced','Balanced: 40% easy, 35% medium, 25% hard'],['harder','More challenging: 20% easy, 35% medium, 45% hard'],['easier','Gentler: 60% easy, 30% medium, 10% hard']].map(function(o){return '<option value="'+o[0]+'"'+(S.aiMix===o[0]?' selected':'')+'>'+o[1]+'</option>';}).join('')+'</select>';
+    if(S.sample===null)h+='<div class="row" style="margin-top:10px"><span class="hint grow">Using your own API key ('+esc(S.apiModel)+')</span><button class="btn ghost sm" data-act="key-clear">Remove key</button></div>';
+    if(S.aiMsg)h+='<div class="note">'+esc(S.aiMsg)+'</div>';
+    h+=S.aiBusy?'<div style="margin-top:14px"><button class="btn hi block" disabled>Writing questions...</button><button class="btn ghost block" style="margin-top:8px" data-act="ai-stop">Stop</button></div>'
+      :'<div style="margin-top:14px"><button class="btn hi block" data-act="ai-gen"'+(S.sample===undefined?' disabled':'')+'>Generate questions</button></div>';
+  }
+  h+='</div>';
+  if(S.aiReview&&S.aiFid===f.id){
+    h+='<h2>Review generated questions</h2><div class="note">AI can make mistakes. Skim each question and untick any that look wrong or unclear.</div>'+
+    '<div class="hint"><span id="aiqcount">'+S.aiReview.length+'</span> of '+S.aiReview.length+' selected.</div>'+
+    '<div class="row" style="margin:8px 0"><button class="btn ghost sm" data-act="aiq-all">Select all</button><button class="btn ghost sm" data-act="aiq-none">Select none</button></div>'+
+    S.aiReview.map(function(q,i){
+      var opts=[q.correct].concat(q.distractors);
+      return '<label class="rev qrev"><input type="checkbox" data-aiq="'+i+'" checked><span style="min-width:0"><span class="chiprow">'+lvChip(q.level)+'<span class="chip">'+esc(TYPE_LABEL[q.kind]||'Question')+'</span><span class="chip">'+esc(q.topic)+'</span></span>'+
+      '<span class="stem" style="display:block">'+esc(q.stem)+'</span><ul>'+opts.map(function(o,k){return '<li'+(k===0?' class="ok"':'')+'>'+esc(o)+(k===0?' (correct)':'')+'</li>';}).join('')+'</ul>'+
+      (q.explanation?'<span class="ex" style="display:block">'+esc(q.explanation)+'</span>':'')+'</span></label>';
+    }).join('')+
+    '<div style="margin-top:12px"><button class="btn block" data-act="aiq-save">Add selected to question bank</button></div>';
+  }
+  var e=S.qEdit?f.questions.find(function(q){return q.id===S.qEdit;}):null;
+  var v=e||{stem:'',correct:'',distractors:['','',''],level:'medium',kind:'understand',topic:S.qTopic,explanation:''};
+  h+='<h2 id="qform">'+(e?'Edit question':'Write a question')+'</h2><div class="panel">'+
+  '<label class="f" for="qs">Question or scenario</label><textarea id="qs" style="min-height:110px" placeholder="A teacher notices that...">'+esc(v.stem)+'</textarea>'+
+  '<label class="f" for="qc">Correct answer</label><input id="qc" type="text" value="'+esc(v.correct)+'">'+
+  [0,1,2].map(function(i){return '<label class="f" for="qd'+i+'">Wrong choice '+(i+1)+(i===2?' (optional)':'')+'</label><input id="qd'+i+'" type="text" value="'+esc(v.distractors[i]||'')+'">';}).join('')+
+  '<label class="f" for="ql">Difficulty</label><select id="ql">'+LEVELS.map(function(l){return '<option value="'+l+'"'+(v.level===l?' selected':'')+'>'+LEVEL_NAME[l]+'</option>';}).join('')+'</select>'+
+  '<label class="f" for="qk">Question type</label><select id="qk">'+KIND_OPTS.map(function(o){return '<option value="'+o[0]+'"'+(v.kind===o[0]?' selected':'')+'>'+o[1]+'</option>';}).join('')+'</select>'+
+  '<label class="f" for="qt">Topic</label><input id="qt" type="text" list="qtopics" value="'+esc(v.topic||'')+'" placeholder="General"><datalist id="qtopics">'+tl.map(function(t){return '<option value="'+esc(t)+'">';}).join('')+'</datalist>'+
+  '<label class="f" for="qe">Why the answer is correct (optional, shown in your report)</label><textarea id="qe">'+esc(v.explanation||'')+'</textarea>'+
+  '<div class="row2">'+(e?'<button class="btn ghost" data-act="q-cancel">Cancel</button>':'<span></span>')+'<button class="btn" data-act="q-save">'+(e?'Save changes':'Add question')+'</button></div></div>';
+  if(f.questions.length){
+    h+='<h2>Your questions ('+f.questions.length+')</h2>'+f.questions.slice().reverse().map(function(q){
+      return '<div class="crow"><div class="chiprow">'+lvChip(q.level)+'<span class="chip">'+esc(TYPE_LABEL[q.kind]||'Question')+'</span><span class="chip">'+esc(q.topic)+'</span><span class="chip">'+(q.source==='ai'?'AI':'You')+'</span></div>'+
+      '<div class="q" style="white-space:pre-wrap">'+esc(q.stem)+'</div><div class="a">Answer: '+esc(q.correct)+'</div>'+
+      '<div class="row" style="margin-top:8px"><span class="grow"></span><button class="btn ghost sm" data-act="q-edit" data-id="'+q.id+'">Edit</button><button class="btn ghost sm" data-act="q-del" data-id="'+q.id+'">Delete</button></div></div>';
+    }).join('');
+  }
+  return h;
+}
+function testSession(f){
+  var t=S.test,q=t.qs[t.i],last=t.i===t.qs.length-1;
+  var answered=t.qs.filter(function(x){return x.chosen!=null;}).length;
+  return '<div class="prog"><span>Question '+(t.i+1)+' of '+t.qs.length+' &middot; '+answered+' answered</span><span id="timer">'+fmt(Date.now()-t.startedAt)+'</span></div>'+
+  '<div class="bar"><i style="width:'+Math.round(100*answered/t.qs.length)+'%"></i></div>'+
+  '<div class="qcard"><div class="qtype">'+TYPE_LABEL[q.type]+(q.type==='term'?'. Which term matches this?':'')+'</div><p class="qtext">'+esc(q.prompt)+'</p></div>'+
+  '<div class="opts">'+q.options.map(function(o,k){return '<button class="opt'+(q.chosen===k?' sel':'')+'" data-act="test-pick" data-k="'+k+'" aria-pressed="'+(q.chosen===k)+'"><span class="k">'+'ABCD'.charAt(k)+'</span><span>'+esc(o)+'</span></button>';}).join('')+'</div>'+
+  '<div class="row2"><button class="btn ghost" data-act="test-prev"'+(t.i===0?' disabled':'')+'>Previous</button>'+
+  (last?'<button class="btn hi" data-act="test-finish">Finish test</button>':'<button class="btn" data-act="test-next">Next</button>')+'</div>'+
+  '<div class="navgrid">'+t.qs.map(function(x,i){return '<button class="dot'+(x.chosen!=null?' done':'')+(i===t.i?' cur':'')+'" data-act="test-jump" data-i="'+i+'" aria-label="Question '+(i+1)+'">'+(i+1)+'</button>';}).join('')+'</div>'+
+  '<div class="row"><button class="btn ghost sm" data-act="test-finish">Finish now</button><button class="link" data-act="test-quit">Quit without saving</button></div>';
+}
+function resultsView(f){
+  if(S.report&&S.report.fid===f.id){
+    var r=f.results.find(function(x){return x.id===S.report.id;});
+    if(r)return reportView(f,r);
+  }
+  if(!f.results.length)return '<div class="empty"><b>No tests taken yet</b>Your reports will appear here after you finish a test.<br><br><button class="btn" data-act="tab" data-t="test">Go to test</button></div>';
+  var last=f.results.slice(-10);
+  var h='<h2>Score trend</h2><div class="trend" aria-label="Recent scores">'+last.map(function(r){var p=Math.round(100*r.correct/r.total);return '<i style="height:'+Math.max(4,p)+'%" title="'+p+'%"></i>';}).join('')+'</div>'+
+  '<div class="hint">Last '+last.length+' attempts, oldest on the left.</div><h2>Attempts</h2>';
+  h+=f.results.slice().reverse().map(function(r){
+    var p=Math.round(100*r.correct/r.total),b=band(p);
+    return '<button class="arow" data-act="open-report" data-id="'+r.id+'"><span><b>'+r.correct+' of '+r.total+'</b> ('+p+'%)<br><span class="hint">'+fdate(r.date)+'</span></span><span class="chip '+b[1]+'">'+b[0]+'</span></button>';
+  }).join('');
+  return h;
+}
+function reportView(f,r){
+  var idx=f.results.indexOf(r),prev=idx>0?f.results[idx-1]:null;
+  var multi=topicsOf(f).length>1;
+  var A=analyze(r,prev,multi),b=band(A.p);
+  var h='<button class="link" data-act="report-back">All attempts</button>'+
+  '<div class="hero"><div class="ring" style="--p:'+A.p+';--c:var(--'+b[1]+')"><div>'+A.p+'%</div></div>'+
+  '<div><div class="big">'+r.correct+' of '+r.total+' correct</div><div class="hint">'+fdate(r.date)+' &middot; '+fmt(r.seconds*1000)+' total</div><span class="chip '+b[1]+'">'+b[0]+'</span></div></div>'+
+  '<div class="panel"><p class="serif" style="font-size:19px;margin:0">'+esc(A.headline)+'</p></div>';
+  h+='<h2>Where to focus</h2>';
+  if(!A.focus.length)h+='<p class="hint">No topic fell below 80%. Nice work. Keep reviewing to hold on to it.</p>';
+  else h+=A.focus.map(function(x,i){var bb=band(x.p);
+    return '<div class="trow"><div class="top"><span>'+(i+1)+'. '+esc(x.t)+'</span><span class="chip '+bb[1]+'">'+x.p+'%</span></div><div class="bar"><i class="'+bb[1]+'" style="width:'+x.p+'%"></i></div><div class="hint">Missed '+x.miss+' of '+x.n+'</div></div>';}).join('');
+  h+='<h2>Strengths</h2>';
+  if(!A.strengths.length)h+='<p class="hint">No topic reached 80% yet. Your best area is '+(A.sorted.length?esc(A.sorted[A.sorted.length-1].t)+' at '+A.sorted[A.sorted.length-1].p+'%':'not available')+'.</p>';
+  else h+=A.strengths.map(function(x){return '<div class="trow"><div class="top"><span>'+esc(x.t)+'</span><span class="chip good">'+x.p+'%</span></div><div class="bar"><i class="good" style="width:'+x.p+'%"></i></div><div class="hint">'+x.c+' of '+x.n+' correct</div></div>';}).join('');
+  var lvs=A.levels.filter(function(x){return x.n>0;});
+  if(lvs.length){
+    h+='<h2>By difficulty</h2>'+lvs.map(function(x){var bb=band(x.p);return '<div class="trow"><div class="top"><span>'+LEVEL_NAME[x.l]+'</span><span class="chip '+bb[1]+'">'+x.p+'%</span></div><div class="bar"><i class="'+bb[1]+'" style="width:'+x.p+'%"></i></div><div class="hint">'+x.c+' of '+x.n+' correct</div></div>';}).join('');
+  }
+  if(A.types.length>1){
+    h+='<h2>By question type</h2>'+A.types.map(function(x){var bb=band(x.p);return '<div class="trow"><div class="top"><span>'+TYPE_NAME[x.k]+'</span><span class="chip '+bb[1]+'">'+x.p+'%</span></div><div class="bar"><i class="'+bb[1]+'" style="width:'+x.p+'%"></i></div><div class="hint">'+x.c+' of '+x.n+' correct</div></div>';}).join('');
+  }
+  if(A.focus.length&&A.focus.some(function(x){return x.share>0;})){
+    h+='<h2>Suggested split for your next session</h2><div class="panel"><ul class="tips">'+A.focus.filter(function(x){return x.share>0;}).map(function(x){return '<li>About '+x.share+'% of your time on '+esc(x.t)+'</li>';}).join('')+'</ul></div>';
+  }
+  h+='<h2>Insights</h2><div class="panel"><ul class="tips">'+A.tips.map(function(t){return '<li>'+esc(t)+'</li>';}).join('')+'</ul></div>';
+  if(r.missed.length){
+    h+='<h2>Items to review ('+r.missed.length+')</h2>'+
+    '<details class="miss"><summary>Show missed items</summary>'+r.missed.map(function(m){
+      return '<div class="mi"><div class="chiprow">'+(m.level?lvChip(m.level):'')+'<span class="chip">'+esc(TYPE_LABEL[m.type]||'Question')+'</span></div><div style="margin-bottom:6px">'+esc(m.prompt)+'</div><div class="yours">Your answer: '+(m.chosen==null?'No answer':esc(m.chosen))+'</div><div class="right">Correct: '+esc(m.correct)+'</div>'+(m.explanation?'<div class="hint" style="margin-top:4px">Why: '+esc(m.explanation)+'</div>':'')+'</div>';
+    }).join('')+'</details>';
+  }
+  h+='<div class="row2" style="margin-top:20px">'+
+  (r.missed.some(function(m){return m.cardId;})?'<button class="btn hi" data-act="report-study">Study missed cards</button>':'<button class="btn hi" data-act="tab" data-t="study">Go to flashcards</button>')+
+  '<button class="btn" data-act="test-start">Retake test</button></div>'+
+  '<button class="btn ghost block" data-act="copy-summary" data-id="'+r.id+'">Copy summary</button>';
+  return h;
+}
+function modalView(){
+  var m=S.modal;
+  if(m.type==='name')return '<div class="mback" data-act="close-modal-bg"><div class="modal" role="dialog" aria-modal="true"><h2>'+esc(m.title)+'</h2><input id="mi" type="text" value="'+esc(m.value||'')+'" placeholder="'+esc(m.placeholder||'')+'" data-enter="modal-ok"><div class="row2"><button class="btn ghost" data-act="close-modal">Cancel</button><button class="btn" data-act="modal-ok">'+esc(m.ok)+'</button></div></div></div>';
+  if(m.type==='confirm')return '<div class="mback" data-act="close-modal-bg"><div class="modal" role="dialog" aria-modal="true"><h2>'+esc(m.title)+'</h2><p>'+esc(m.body)+'</p><div class="row2"><button class="btn ghost" data-act="close-modal">Cancel</button><button class="btn '+(m.danger?'bad':'')+'" data-act="modal-ok">'+esc(m.ok)+'</button></div></div></div>';
+  var json=JSON.stringify({app:'review-desk',version:1,exported:new Date().toISOString(),data:S.data});
+  return '<div class="mback" data-act="close-modal-bg"><div class="modal" role="dialog" aria-modal="true"><h2>Backup and restore</h2>'+
+  '<p class="hint">Copy this text and keep it somewhere safe, like a note or a file. Paste it back here on any device to restore.</p>'+
+  '<textarea id="bk" readonly style="min-height:90px">'+esc(json)+'</textarea>'+
+  '<div style="margin:8px 0 16px"><button class="btn block" data-act="copy-backup">Copy backup</button></div>'+
+  '<label class="f" for="bkfile">Restore from a backup file</label><input id="bkfile" type="file" accept=".json,.txt,application/json,text/plain">'+
+  '<label class="f" for="bkin">Or paste a backup</label><textarea id="bkin" placeholder="Paste backup text here"></textarea>'+
+  '<div class="err" id="bkerr"></div>'+
+  '<div class="row2"><button class="btn ghost" data-act="close-modal">Close</button><button class="btn" data-act="restore-backup">Restore</button></div></div></div>';
+}
+function render(){
+  if(!S.user){app.innerHTML=authView();return;}
+  var body=S.view==='home'?homeView():folderView();
+  app.innerHTML=headerView()+'<main class="wrap">'+(storageOK?'':'<div class="note warn">Storage is blocked in this browser. Your data will be lost when you close this page. Use Backup to save a copy.</div>')+body+'</main>'+(S.modal?modalView():'');
+  var mi=$('mi');if(mi){mi.focus();mi.select&&mi.select();}
+}
+
+/* ---------- actions ---------- */
+function setErr(t){S.authErr=t;var e=$('autherr');if(e)e.textContent=t;}
+function startSession(key){
+  S.user=key;S.display=getUsers()[key].name;S.data=loadData(key);st.set('rd_session',key);resetNav();nav();
+}
+function doLogin(){
+  var name=($('u').value||'').trim(),pw=$('p').value||'',key=name.toLowerCase(),users=getUsers();
+  if(!name||!pw)return setErr('Enter your username and password.');
+  var rec=users[key];if(!rec)return setErr('No account with that name on this device. Create one first.');
+  hashPw(pw,rec.salt).then(function(h){if(h!==rec.hash)setErr('Wrong password.');else startSession(key);});
+}
+function doRegister(){
+  var name=($('u').value||'').trim(),pw=$('p').value||'',pw2=$('p2')?$('p2').value:'',key=name.toLowerCase(),users=getUsers();
+  if(name.length<3)return setErr('Username must be at least 3 characters.');
+  if(pw.length<4)return setErr('Password must be at least 4 characters.');
+  if(pw!==pw2)return setErr('Passwords do not match.');
+  if(users[key])return setErr('That username is taken on this device. Log in instead.');
+  var salt=uid()+uid();
+  hashPw(pw,salt).then(function(h){users[key]={name:name,salt:salt,hash:h};saveUsers(users);startSession(key);});
+}
+function folderIn(){return folder();}
+function openModal(m){S.modal=m;render();}
+function closeModal(){S.modal=null;render();}
+function addFolder(name){
+  name=(name||'').trim();if(!name){toast('Enter a folder name.');return false;}
+  var f={id:uid(),name:name,created:Date.now(),cards:[],results:[],questions:[]};
+  S.data.folders.push(f);persist();S.fid=f.id;S.view='folder';S.tab='add';S.modal=null;nav();return true;
+}
+function normTopic(t){t=(t||'').replace(/\s+/g,' ').trim();return t?t.slice(0,60):'General';}
+function runGenerate(topicDefault){
+  var text=S.noteText||'';
+  if(text.replace(/\s/g,'').length<10){toast('Paste some notes or upload a file first.');return;}
+  var items=extractCards(text,S.cloze);
+  S.imp={items:items,topic:normTopic(S.topicGen||topicDefault)};
+  render();
+  toast(items.length?items.length+' cards ready to review':'No cards found');
+  var el=$('impcount');if(el&&el.scrollIntoView)el.scrollIntoView({behavior:'smooth',block:'center'});
+}
+function handleFile(inp){
+  var file=inp.files&&inp.files[0];if(!file)return;
+  var say=function(t){var s=$('fstatus');if(s)s.textContent=t;};
+  say('Reading '+file.name+'...');
+  readDoc(file,say).then(function(text){
+    if(!text||text.replace(/\s/g,'').length<20){say('No readable text found. Scanned PDFs and images need OCR first.');return;}
+    S.noteText=text.slice(0,400000);
+    S.topicGen=file.name.replace(/\.[^.]+$/,'').slice(0,60);
+    runGenerate();
+  }).catch(function(e){say('Could not read this file. '+(e&&e.message?e.message:''));});
+}
+function updateImpCount(){
+  var n=document.querySelectorAll('input[data-imp]:checked').length,el=$('impcount');if(el)el.textContent=n;
+}
+function startStudyWith(ids,backFirst){
+  S.study={fid:S.fid,queue:shuffle(ids),i:0,flip:false,miss:[],right:0,backFirst:!!backFirst,done:false,anim:false};
+  S.tab='study';nav();
+}
+function studyAdvance(ok){
+  var f=folder(),s=S.study,c=f.cards.find(function(x){return x.id===s.queue[s.i];});
+  if(c){c.seen=(c.seen||0)+1;if(ok){c.right=(c.right||0)+1;c.box=Math.min(4,(c.box||0)+1);s.right++;}else{c.box=0;s.miss.push(c.id);}}
+  persist();s.i++;s.flip=false;s.anim=false;if(s.i>=s.queue.length)s.done=true;render();
+}
+function leaveQ(){var t=S.test;if(!t)return;var q=t.qs[t.i];q.ms+=Date.now()-t.qStart;t.qStart=Date.now();}
+function startTest(){
+  var f=folder();
+  if(f.cards.length<4&&f.questions.length<4){toast('Add at least 4 cards or questions to build a test.');return;}
+  var qs=buildTest(f.cards,f.questions);
+  if(!qs.length){toast('Could not build questions from these cards.');return;}
+  S.test={fid:f.id,qs:qs,i:0,startedAt:Date.now(),qStart:Date.now()};S.tab='test';S.report=null;nav();
+}
+function submitTest(){
+  var t=S.test,f=folder();leaveQ();
+  var byTopic={},byType={},byLevel={},missed=[],correct=0,blank=0;
+  t.qs.forEach(function(q){
+    var ok=q.chosen===q.answer;
+    var bt=byTopic[q.topic]=byTopic[q.topic]||{c:0,n:0};bt.n++;
+    var by=byType[q.type]=byType[q.type]||{c:0,n:0};by.n++;
+    var lk=q.level||'easy';var bv=byLevel[lk]=byLevel[lk]||{c:0,n:0};bv.n++;
+    var card=f.cards.find(function(c){return c.id===q.cardId;});
+    if(ok){correct++;bt.c++;by.c++;bv.c++;if(card)card.box=Math.min(4,(card.box||0)+1);}
+    else{
+      if(q.chosen==null)blank++;
+      if(card)card.box=0;
+      missed.push({cardId:q.cardId,type:q.type,level:lk,explanation:q.explanation||'',topic:q.topic,prompt:q.prompt,chosen:q.chosen==null?null:q.options[q.chosen],correct:q.options[q.answer]});
+    }
+  });
+  var res={id:uid(),date:Date.now(),total:t.qs.length,correct:correct,blank:blank,seconds:Math.round((Date.now()-t.startedAt)/1000),byTopic:byTopic,byType:byType,byLevel:byLevel,missed:missed};
+  f.results.push(res);persist();S.test=null;S.report={fid:f.id,id:res.id};S.tab='results';S.modal=null;nav();
+}
+function finishTest(){
+  var un=S.test.qs.filter(function(q){return q.chosen==null;}).length;
+  if(un>0){openModal({type:'confirm',title:'Finish the test?',body:'You have '+un+' unanswered '+(un===1?'item':'items')+'. Unanswered items count as incorrect.',ok:'Finish and see report',fn:submitTest});}
+  else submitTest();
+}
+function restoreBackup(){
+  var raw=($('bkin').value||'').trim(),err=$('bkerr');
+  if(!raw){err.textContent='Paste or choose a backup first.';return;}
+  var obj;try{obj=JSON.parse(raw);}catch(e){err.textContent='That text is not a valid backup.';return;}
+  var d=obj&&obj.data?obj.data:obj;
+  if(!d||!Array.isArray(d.folders)){err.textContent='That backup has no folders in it.';return;}
+  openModal({type:'confirm',title:'Replace your data?',body:'This replaces all folders, cards and results in this account with the backup.',ok:'Replace data',danger:true,fn:function(){
+    d.folders.forEach(function(f){f.id=f.id||uid();f.cards=f.cards||[];f.results=f.results||[];f.questions=f.questions||[];});
+    S.data={folders:d.folders};persist();resetNav();nav();toast('Backup restored');
+  }});
+}
+function copyText(text,okMsg){
+  function fallback(){
+    var ta=document.createElement('textarea');ta.value=text;ta.style.position='fixed';ta.style.opacity='0';document.body.appendChild(ta);ta.select();
+    var ok=false;try{ok=document.execCommand('copy');}catch(e){}document.body.removeChild(ta);toast(ok?okMsg:'Copy is blocked here. Select the text and copy it by hand.');
+  }
+  try{if(navigator.clipboard&&navigator.clipboard.writeText){navigator.clipboard.writeText(text).then(function(){toast(okMsg);},fallback);return;}}catch(e){}
+  fallback();
+}
+
+function mixCounts(n,mode){
+  var m=mode==='harder'?[0.2,0.35]:mode==='easier'?[0.6,0.3]:[0.4,0.35];
+  var e=Math.round(n*m[0]),md=Math.round(n*m[1]);return {easy:e,medium:md,hard:n-e-md};
+}
+function cleanAI(v,existing){
+  if(v&&!Array.isArray(v)&&Array.isArray(v.questions))v=v.questions;
+  if(!Array.isArray(v))return [];
+  var have={};existing.forEach(function(q){have[q.stem.toLowerCase().trim()]=1;});
+  var out=[];
+  v.forEach(function(x){
+    if(!x||typeof x.stem!=='string'||typeof x.correct!=='string'||!Array.isArray(x.distractors))return;
+    var stem=x.stem.trim(),correct=x.correct.trim();
+    var ds=uniq(x.distractors.map(function(d){return String(d).trim();}).filter(Boolean)).filter(function(d){return d.toLowerCase()!==correct.toLowerCase();}).slice(0,3);
+    if(!stem||!correct||ds.length<2||have[stem.toLowerCase()])return;
+    have[stem.toLowerCase()]=1;
+    var level=LEVELS.indexOf(x.level)>-1?x.level:'medium';
+    var kind=['recall','understand','apply','analyze'].indexOf(x.kind)>-1?x.kind:(level==='easy'?'recall':level==='medium'?'understand':'apply');
+    out.push({stem:stem,correct:correct,distractors:ds,level:level,kind:kind,topic:normTopic(x.topic),explanation:String(x.explanation||'').trim(),source:'ai'});
+  });
+  return out;
+}
+function aiError(e){
+  var c=e&&e.code;
+  if(c==='cancelled')return '';
+  if(c==='not_granted'||c==='sampling_disabled'||c==='not_declared'||c==='capability_disabled')return 'Claude is not available for this page. You can still write questions by hand.';
+  if(c==='rate_limited')return 'Too many requests, or your Claude usage limit was reached. Try again later.';
+  if(c==='invalid_json'||c==='empty_completion')return 'The reply could not be read. Try again with fewer questions.';
+  if(c==='prompt_too_large')return 'That is too much material at once. Pick one topic and try again.';
+  if(c==='bad_key')return 'Anthropic rejected the API key. Check it and try again.';
+  if(c==='bad_model')return 'That model name was not found. Check the model field and try again.';
+  if(c==='network')return 'Could not reach Anthropic. Check your connection and key. Some hosts block this request.';
+  if(c==='session_expired')return 'Your session expired. Sign in to Claude again, then retry.';
+  return 'Something went wrong. Try again in a moment.';
+}
+function parseLoose(text){
+  var t=String(text||'').replace(/```json|```/g,'').trim();
+  try{return JSON.parse(t);}catch(e){}
+  var a=t.indexOf('['),b=t.lastIndexOf(']');
+  if(a>-1&&b>a){try{return JSON.parse(t.slice(a,b+1));}catch(e){}}
+  throw {code:'invalid_json'};
+}
+function askAI(prompt,signal){
+  if(S.sample)return S.sample.json(prompt,{signal:signal,modelTier:'default',cache:false});
+  return fetch('https://api.anthropic.com/v1/messages',{
+    method:'POST',signal:signal,
+    headers:{'content-type':'application/json','x-api-key':S.apiKey,'anthropic-version':'2023-06-01','anthropic-dangerous-direct-browser-access':'true'},
+    body:JSON.stringify({model:S.apiModel||'claude-sonnet-5-5',max_tokens:8000,messages:[{role:'user',content:prompt}]})
+  }).then(function(r){
+    return r.json().catch(function(){return {};}).then(function(j){
+      if(!r.ok){
+        var code=r.status===401||r.status===403?'bad_key':r.status===429?'rate_limited':r.status===404?'bad_model':'upstream_error';
+        throw {code:code,message:(j&&j.error&&j.error.message)||''};
+      }
+      var text=(j.content||[]).filter(function(c){return c.type==='text';}).map(function(c){return c.text;}).join('');
+      return parseLoose(text);
+    });
+  },function(e){
+    if(e&&e.name==='AbortError')throw {code:'cancelled'};
+    throw {code:'network'};
+  });
+}
+function genAI(){
+  var f=folder();
+  if(!S.sample&&!S.apiKey){toast('AI generation is not available here.');return;}
+  var cards=f.cards;
+  if(S.aiScope&&S.aiScope!=='all')cards=cards.filter(function(c){return c.topic===S.aiScope;});
+  if(cards.length<3){toast('Add at least 3 cards in that scope first.');return;}
+  cards=shuffle(cards).slice(0,120);
+  var material=cards.map(function(c){return '['+c.topic+'] '+c.front+' :: '+c.back;}).join('\n').slice(0,70000);
+  var n=+S.aiCount||20,mx=mixCounts(n,S.aiMix);
+  var avoid=f.questions.slice(-25).map(function(q){return '- '+q.stem.slice(0,120);}).join('\n');
+  var prompt='You are an expert teacher and assessment writer. Using ONLY the study material below, write multiple-choice questions for a review test.\n\n'+
+  'Write exactly '+mx.easy+' easy, '+mx.medium+' medium and '+mx.hard+' hard questions.\n'+
+  'Levels:\n- easy: recall of a fact, term or definition (kind "recall").\n'+
+  '- medium: understanding, such as explaining, comparing, identifying an example or interpreting (kind "understand").\n'+
+  '- hard: higher-order thinking. Each hard question MUST be situational: describe a short, concrete, realistic scenario of 2 to 4 sentences, then ask what to do, which concept applies, what follows, or what the error is (kind "apply" or "analyze").\n\n'+
+  'Rules:\n- Exactly one clearly correct answer and 3 plausible distractors built from common misconceptions.\n- Never use "all of the above" or "none of the above".\n- Do not reveal the answer in the question.\n- Every question must be answerable from the material. Cover different topics and do not repeat a fact.\n- Keep each question under 90 words and each option under 25 words.\n- For "topic", use one of the topic labels in square brackets in the material.\n'+
+  (avoid?'- Do not repeat these existing questions:\n'+avoid+'\n':'')+
+  '\nReturn ONLY a JSON array with no markdown fence and no commentary. Each item has this shape:\n{"level":"easy|medium|hard","kind":"recall|understand|apply|analyze","topic":"...","stem":"...","correct":"...","distractors":["...","...","..."],"explanation":"one or two sentences on why the correct answer is right"}\n\n'+
+  'STUDY MATERIAL (format: [topic] front :: back)\n'+material;
+  S.aiCtl=new AbortController();S.aiBusy=true;S.aiFid=f.id;S.aiReview=null;
+  S.aiMsg='Writing questions with Claude. This can take up to a minute.';render();
+  askAI(prompt,S.aiCtl.signal).then(function(v){
+    var items=cleanAI(v,f.questions);
+    S.aiReview=items.length?items:null;
+    S.aiMsg=items.length?'':'No usable questions came back. Try again.';
+  }).catch(function(e){S.aiMsg=aiError(e);}).then(function(){S.aiBusy=false;S.aiCtl=null;render();});
+}
+function updateAiqCount(){var n=document.querySelectorAll('input[data-aiq]:checked').length,el=$('aiqcount');if(el)el.textContent=n;}
+function saveQuestion(){
+  var f=folder(),stem=($('qs').value||'').trim(),correct=($('qc').value||'').trim();
+  var ds=[0,1,2].map(function(i){return ($('qd'+i).value||'').trim();}).filter(Boolean);
+  ds=uniq(ds).filter(function(d){return d.toLowerCase()!==correct.toLowerCase();});
+  if(!stem||!correct){toast('Add the question and the correct answer.');return;}
+  if(ds.length<2){toast('Add at least 2 different wrong choices.');return;}
+  var obj={stem:stem,correct:correct,distractors:ds,level:$('ql').value,kind:$('qk').value,topic:normTopic($('qt').value),explanation:($('qe').value||'').trim()};
+  S.qTopic=($('qt').value||'').trim();
+  if(S.qEdit){var q=f.questions.find(function(x){return x.id===S.qEdit;});if(q){for(var k in obj)q[k]=obj[k];}S.qEdit=null;toast('Question updated');}
+  else{obj.id=uid();obj.source='manual';obj.created=Date.now();f.questions.push(obj);toast('Question added ('+f.questions.length+' total)');}
+  persist();render();
+}
+function act(a,el,ev){
+  var f;
+  switch(a){
+    case 'auth-tab':S.authTab=el.dataset.v;S.authErr='';render();break;
+    case 'do-login':doLogin();break;
+    case 'do-register':doRegister();break;
+    case 'logout':S.apiKey=st.get('rd_apikey')||'';S.user=null;S.data=null;S.display='';st.del('rd_session');resetNav();S.authTab='login';render();break;
+    case 'go-home':if(S.user){S.view='home';S.fid=null;nav();}break;
+    case 'new-folder':openModal({type:'name',title:'New folder',value:'',placeholder:'e.g. Algebra',ok:'Create folder',fn:addFolder});break;
+    case 'open-folder':S.fid=el.dataset.id;S.view='folder';S.tab=folder()&&folder().cards.length?'cards':'add';S.study=null;S.test=null;S.report=null;S.imp=null;S.editId=null;nav();break;
+    case 'tab':S.tab=el.dataset.t;nav();break;
+    case 'rename-folder':f=folder();openModal({type:'name',title:'Rename folder',value:f.name,ok:'Save name',fn:function(n){n=(n||'').trim();if(!n){toast('Enter a folder name.');return false;}f.name=n;persist();S.modal=null;render();}});break;
+    case 'delete-folder':f=folder();openModal({type:'confirm',title:'Delete "'+f.name+'"?',body:'This removes its '+f.cards.length+' cards and all test results. This cannot be undone.',ok:'Delete folder',danger:true,fn:function(){S.data.folders=S.data.folders.filter(function(x){return x.id!==f.id;});persist();resetNav();nav();toast('Folder deleted');}});break;
+    case 'modal-ok':
+      if(S.modal&&S.modal.type==='name'){var r=S.modal.fn($('mi').value);if(r===false)break;}
+      else if(S.modal&&S.modal.fn){var fn=S.modal.fn;S.modal=null;render();fn();}
+      break;
+    case 'close-modal':closeModal();break;
+    case 'close-modal-bg':if(ev&&ev.target===el)closeModal();break;
+    case 'open-backup':openModal({type:'backup'});break;
+    case 'copy-backup':copyText($('bk').value,'Backup copied');break;
+    case 'restore-backup':restoreBackup();break;
+    case 'add-card':
+      f=folder();var q=($('mf').value||'').trim(),b=($('mb').value||'').trim();
+      if(!q||!b){toast('Fill in both the question and the answer.');break;}
+      S.manualTopic=($('mt').value||'').trim();
+      f.cards.push({id:uid(),front:q,back:b,topic:normTopic(S.manualTopic),kind:'manual',box:0,seen:0,right:0,created:Date.now()});
+      persist();render();toast('Card added ('+f.cards.length+' total)');var nf=$('mf');if(nf)nf.focus();break;
+    case 'edit-card':S.editId=el.dataset.id;render();break;
+    case 'cancel-edit':S.editId=null;render();break;
+    case 'save-edit':
+      f=folder();var c=f.cards.find(function(x){return x.id===el.dataset.id;});
+      if(c){var nq=($('ef').value||'').trim(),nb=($('eb').value||'').trim();if(!nq||!nb){toast('Both sides need text.');break;}c.front=nq;c.back=nb;c.topic=normTopic($('et').value);persist();}
+      S.editId=null;render();toast('Card updated');break;
+    case 'delete-card':f=folder();f.cards=f.cards.filter(function(x){return x.id!==el.dataset.id;});persist();render();toast('Card deleted');break;
+    case 'gen-notes':
+      S.noteText=$('notes').value;S.topicGen=($('gt').value||'').trim();S.cloze=$('cloze').checked;runGenerate();break;
+    case 'imp-all':document.querySelectorAll('input[data-imp]').forEach(function(x){x.checked=true;});updateImpCount();break;
+    case 'imp-none':document.querySelectorAll('input[data-imp]').forEach(function(x){x.checked=false;});updateImpCount();break;
+    case 'save-import':
+      f=folder();var topic=normTopic($('rtopic').value),n=0;
+      document.querySelectorAll('input[data-imp]:checked').forEach(function(x){
+        var it=S.imp.items[+x.dataset.imp];
+        if(it){f.cards.push({id:uid(),front:it.front,back:it.back,topic:topic,kind:it.kind,box:0,seen:0,right:0,created:Date.now()});n++;}
+      });
+      if(!n){toast('Select at least one card.');break;}
+      persist();S.imp=null;S.noteText='';S.topicGen='';S.tab='cards';nav();toast(n+' cards added');break;
+    case 'study-start':
+      f=folder();var scope=$('scope').value,cards=f.cards;
+      if(scope==='weak')cards=cards.filter(function(x){return x.box<=2;});
+      else if(scope.indexOf('t:')===0)cards=cards.filter(function(x){return x.topic===scope.slice(2);});
+      if(!cards.length){toast('No cards match that choice.');break;}
+      startStudyWith(cards.map(function(x){return x.id;}),$('backfirst').checked);break;
+    case 'study-flip':S.study.flip=!S.study.flip;S.study.anim=true;render();break;
+    case 'study-know':studyAdvance(true);break;
+    case 'study-miss':studyAdvance(false);break;
+    case 'study-exit':S.study=null;render();break;
+    case 'study-missed':startStudyWith(S.study.miss.slice(),S.study.backFirst);break;
+    case 'key-save':
+      var kv=($('apikey').value||'').trim(),mv=($('apimodel').value||'').trim()||'claude-sonnet-5-5';
+      if(!/^sk-ant-/.test(kv)){toast('That does not look like an Anthropic API key.');break;}
+      S.apiKey=kv;S.apiModel=mv;st.set('rd_model',mv);
+      if($('keyremember')&&$('keyremember').checked)st.set('rd_apikey',kv);else st.del('rd_apikey');
+      S.aiMsg='';render();toast('Key ready. It is not included in backups.');break;
+    case 'key-clear':S.apiKey='';st.del('rd_apikey');S.aiMsg='';render();toast('Key removed');break;
+    case 'ai-gen':genAI();break;
+    case 'ai-stop':if(S.aiCtl)S.aiCtl.abort();break;
+    case 'aiq-all':document.querySelectorAll('input[data-aiq]').forEach(function(x){x.checked=true;});updateAiqCount();break;
+    case 'aiq-none':document.querySelectorAll('input[data-aiq]').forEach(function(x){x.checked=false;});updateAiqCount();break;
+    case 'aiq-save':
+      f=folder();var nq=0;
+      document.querySelectorAll('input[data-aiq]:checked').forEach(function(x){
+        var it=S.aiReview&&S.aiReview[+x.dataset.aiq];
+        if(it){f.questions.push({id:uid(),stem:it.stem,correct:it.correct,distractors:it.distractors,level:it.level,kind:it.kind,topic:it.topic,explanation:it.explanation,source:'ai',created:Date.now()});nq++;}
+      });
+      if(!nq){toast('Select at least one question.');break;}
+      persist();S.aiReview=null;S.aiMsg='';render();toast(nq+' questions added');break;
+    case 'q-save':saveQuestion();break;
+    case 'q-edit':S.qEdit=el.dataset.id;render();var qf=$('qform');if(qf&&qf.scrollIntoView)qf.scrollIntoView({block:'start'});break;
+    case 'q-cancel':S.qEdit=null;render();break;
+    case 'q-del':f=folder();f.questions=f.questions.filter(function(x){return x.id!==el.dataset.id;});if(S.qEdit===el.dataset.id)S.qEdit=null;persist();render();toast('Question deleted');break;
+    case 'test-start':startTest();break;
+    case 'test-pick':S.test.qs[S.test.i].chosen=+el.dataset.k;render();break;
+    case 'test-next':leaveQ();if(S.test.i<S.test.qs.length-1)S.test.i++;nav();break;
+    case 'test-prev':leaveQ();if(S.test.i>0)S.test.i--;nav();break;
+    case 'test-jump':leaveQ();S.test.i=+el.dataset.i;nav();break;
+    case 'test-finish':finishTest();break;
+    case 'test-quit':openModal({type:'confirm',title:'Quit this test?',body:'Your answers will not be saved.',ok:'Quit test',danger:true,fn:function(){S.test=null;nav();}});break;
+    case 'open-report':S.report={fid:S.fid,id:el.dataset.id};nav();break;
+    case 'report-back':S.report=null;nav();break;
+    case 'report-study':
+      f=folder();var rr=f.results.find(function(x){return x.id===S.report.id;});
+      var ids=uniq(rr.missed.map(function(m){return m.cardId;}).filter(Boolean)).filter(function(id){return f.cards.some(function(c){return c.id===id;});});
+      if(!ids.length){toast('No flashcards are linked to those items. Review them in the report.');break;}
+      startStudyWith(ids,false);break;
+    case 'copy-summary':
+      f=folder();var res=f.results.find(function(x){return x.id===el.dataset.id;});
+      var idx=f.results.indexOf(res),A=analyze(res,idx>0?f.results[idx-1]:null,topicsOf(f).length>1);
+      var txt=f.name+' test, '+fdate(res.date)+': '+res.correct+'/'+res.total+' ('+A.p+'%).\n'+
+        (A.focus.length?'Focus on: '+A.focus.map(function(x){return x.t+' ('+x.p+'%)';}).join(', ')+'.\n':'')+
+        (A.strengths.length?'Strengths: '+A.strengths.map(function(x){return x.t+' ('+x.p+'%)';}).join(', ')+'.\n':'')+
+        A.tips.join('\n');
+      copyText(txt,'Summary copied');break;
+  }
+}
+
+/* ---------- events ---------- */
+document.addEventListener('click',function(e){
+  var t=e.target.closest('[data-act]');if(!t)return;
+  act(t.dataset.act,t,e);
+});
+document.addEventListener('change',function(e){
+  var t=e.target;
+  if(t.id==='file')handleFile(t);
+  else if(t.id==='bkfile'&&t.files&&t.files[0]){readAs(t.files[0],'text').then(function(x){$('bkin').value=x;}).catch(function(){$('bkerr').textContent='Could not read that file.';});}
+  else if(t.id==='cloze')S.cloze=t.checked;
+  else if(t.id==='aiscope')S.aiScope=t.value;
+  else if(t.id==='aicount')S.aiCount=t.value;
+  else if(t.id==='aimix')S.aiMix=t.value;
+  else if(t.hasAttribute&&t.hasAttribute('data-aiq'))updateAiqCount();
+  else if(t.hasAttribute&&t.hasAttribute('data-imp'))updateImpCount();
+});
+document.addEventListener('input',function(e){
+  var t=e.target;
+  if(t.id==='notes')S.noteText=t.value;
+  else if(t.id==='gt')S.topicGen=t.value;
+  else if(t.id==='search'){
+    var q=t.value.toLowerCase().trim();
+    document.querySelectorAll('.crow[data-s]').forEach(function(r){var s=r.getAttribute('data-s');r.style.display=(!q||!s||s.indexOf(q)>-1)?'':'none';});
+  }
+});
+document.addEventListener('keydown',function(e){
+  var t=e.target;
+  if(e.key==='Enter'&&t.dataset&&t.dataset.enter){e.preventDefault();act(t.dataset.enter,t);return;}
+  if(e.key==='Escape'&&S.modal){closeModal();return;}
+  var typing=/INPUT|TEXTAREA|SELECT/.test(t.tagName);
+  if(typing||S.modal)return;
+  if(S.study&&!S.study.done&&S.study.flip&&S.view==='folder'&&S.tab==='study'){
+    if(e.key==='ArrowRight'||e.key==='2'){studyAdvance(true);}
+    else if(e.key==='ArrowLeft'||e.key==='1'){studyAdvance(false);}
+  }
+});
+setInterval(function(){var el=$('timer');if(el&&S.test)el.textContent=fmt(Date.now()-S.test.startedAt);},1000);
+
+/* ---------- boot ---------- */
+try{
+  if(window.claude&&window.claude.use){
+    window.claude.use('sample').then(function(fn){
+      S.sample=fn||null;
+      var ae=document.activeElement,typing=ae&&/INPUT|TEXTAREA|SELECT/.test(ae.tagName);
+      if(S.user&&S.view==='folder'&&S.tab==='questions'&&!S.aiBusy&&!typing)render();
+    }).catch(function(){S.sample=null;});
+  }else S.sample=null;
+}catch(e){S.sample=null;}
+var sess=st.get('rd_session');
+if(sess&&getUsers()[sess])startSession(sess);else render();
+})();
+</script>
+</body>
+</html>
